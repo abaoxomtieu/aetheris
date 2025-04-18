@@ -8,3 +8,6 @@ vite.config.ts.*
 .env.example
 .replit
 uploads/*
+migrations
+ap-southeast-2-bundle.pem
+

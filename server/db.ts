@@ -2,12 +2,18 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { log } from "./vite";
 import "dotenv/config";
+import fs from "fs";
 // Initialize Postgres client with the database connection string
 const connectionString = process.env.DATABASE_URL!;
 log(`Connecting to database: ${connectionString.split("@")[1]}`, "postgres");
 
 // For use with Drizzle ORM
-const client = postgres(connectionString);
+const client = postgres(connectionString, {
+  ssl: {
+    rejectUnauthorized: true,
+    ca: fs.readFileSync("./ap-southeast-2-bundle.pem").toString(),
+  },
+});
 export const db = drizzle(client);
 
 // Health check function to verify DB connection
