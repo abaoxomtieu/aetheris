@@ -9,11 +9,12 @@ export function getApiBaseUrl(): string {
   // Check if running locally using Vite dev server
   if (import.meta.env.VITE_DEV_SERVER_URL) {
     // If running locally, API requests should go to port 5000 instead of 5173
-    return 'http://localhost:5001/api';
+    // return 'http://localhost:5001/api';
+    return "http://3.107.99.255:5001/api";
   }
-  
+
   // In production or Replit, the API is on the same origin
-  return '/api';
+  return "/api";
 }
 
 /**
@@ -23,6 +24,6 @@ export function getApiBaseUrl(): string {
  */
 export function apiUrl(path: string): string {
   const baseUrl = getApiBaseUrl();
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   return `${baseUrl}${normalizedPath}`;
 }
