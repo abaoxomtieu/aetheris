@@ -14,6 +14,7 @@ import { promisify } from "util";
 import session from "express-session";
 import createMemoryStore from "memorystore";
 import connectPg from "connect-pg-simple";
+import fs from "fs";
 
 const scryptAsync = promisify(scrypt);
 
@@ -679,9 +680,12 @@ export class DatabaseStorage implements IStorage {
     // Initialize PostgreSQL session store
     const PostgresStore = connectPg(session);
     this.sessionStore = new PostgresStore({
-      // Use the DATABASE_URL environment variable provided by Replit
       conObject: {
-        connectionString: "postgresql://postgres:250203@localhost:5432/aetheris_1",
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: true,
+          ca: fs.readFileSync("./ap-southeast-2-bundle.pem").toString(),
+        },
       },
       createTableIfMissing: true,
       tableName: 'session',
