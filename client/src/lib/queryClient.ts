@@ -18,8 +18,8 @@ export async function apiRequest(
     ? apiUrl(url.substring(4)) // Remove the /api prefix as apiUrl adds it
     : url;
 
-  console.log("API Request:", { method, url: fullUrl, credentials: "include" });
-
+  console.log('API Request:', { method, url: fullUrl, credentials: 'include' });
+  
   const res = await fetch(fullUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
@@ -27,11 +27,8 @@ export async function apiRequest(
     credentials: "include",
   });
 
-  console.log("API Response:", {
-    status: res.status,
-    statusText: res.statusText,
-  });
-
+  console.log('API Response:', { status: res.status, statusText: res.statusText });
+  
   await throwIfResNotOk(res);
   return res;
 }
@@ -48,19 +45,16 @@ export const getQueryFn: <T>(options: {
       url = apiUrl(url.substring(4)); // Remove the /api prefix as apiUrl adds it
     }
 
-    console.log("Query Request:", { url, credentials: "include" });
-
+    console.log('Query Request:', { url, credentials: 'include' });
+    
     const res = await fetch(url, {
       credentials: "include",
     });
 
-    console.log("Query Response:", {
-      status: res.status,
-      statusText: res.statusText,
-    });
-
+    console.log('Query Response:', { status: res.status, statusText: res.statusText });
+    
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      console.log("Unauthorized request handled with returnNull behavior");
+      console.log('Unauthorized request handled with returnNull behavior');
       return null;
     }
 
