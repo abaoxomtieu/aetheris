@@ -1,40 +1,36 @@
 import { useAuth } from "@/hooks/use-auth";
-import { Loader2 } from "lucide-react";
-import { Redirect, Route, RouteComponentProps } from "wouter";
+import { Redirect, useLocation } from "wouter";
 
-export interface ProtectedRouteProps {
-  path: string;
-  component: React.ComponentType<any>;
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  /**
+   * If true, the route is only accessible to unauthenticated users
+   * If false, the route is only accessible to authenticated users
+   */
+  isAuthRoute?: boolean;
+  /**
+   * Where to redirect if the route protection fails
+   */
+  redirectTo?: string;
 }
 
-export function ProtectedRoute({
-  path,
-  component: Component,
+export function ProtectedRoute({ 
+  children, 
+  isAuthRoute = false,
+  redirectTo = isAuthRoute ? "/roles" : "/login"
 }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
-  if (isLoading) {
-    return (
-      <Route path={path}>
-        {() => (
-          <div className="flex items-center justify-center min-h-screen">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          </div>
-        )}
-      </Route>
-    );
+  const { user } = useAuth();
+  const [location] = useLocation();
+
+  // If this is an auth route (login/register) and user is logged in, redirect to dashboard
+  if (isAuthRoute && user) {
+    return <Redirect to={redirectTo} />;
   }
 
-  if (!user) {
-    return (
-      <Route path={path}>
-        {() => <Redirect to="/login" />}
-      </Route>
-    );
+  // If this is a protected route and user is not logged in, redirect to login
+  if (!isAuthRoute && !user) {
+    return <Redirect to={redirectTo} />;
   }
 
-  return (
-    <Route path={path}>
-      {(params) => <Component {...params} />}
-    </Route>
-  );
+  return <>{children}</>;
 }

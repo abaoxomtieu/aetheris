@@ -14,10 +14,30 @@ import AuthPage from "./pages/auth-page";
 function Router() {
   return (
     <Switch>
-      <ProtectedRoute path="/" component={Dashboard} />
-      <ProtectedRoute path="/roles" component={CareerRolesPage} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/auth" component={AuthPage} />
+      <Route path="/">
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/roles">
+        <ProtectedRoute>
+          <CareerRolesPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/login">
+        <ProtectedRoute isAuthRoute>
+          <LoginPage />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/auth">
+        <ProtectedRoute isAuthRoute>
+          <AuthPage />
+        </ProtectedRoute>
+      </Route>
+      
       <Route path="/unauthorized" component={UnauthorizedPage} />
       <Route component={NotFound} />
     </Switch>

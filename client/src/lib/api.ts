@@ -10,7 +10,8 @@ export function getApiBaseUrl(): string {
   if (import.meta.env.VITE_DEV_SERVER_URL) {
     // If running locally, API requests should go to port 5000 instead of 5173
     // return 'http://localhost:5001/api';
-    return "http://3.107.99.255:5001/api";
+    // return "http://3.107.99.255:5001/api";
+    return import.meta.env.VITE_DEV_SERVER_URL;
   }
 
   // In production or Replit, the API is on the same origin
